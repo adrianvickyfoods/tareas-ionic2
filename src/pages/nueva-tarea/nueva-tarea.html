@@ -1,0 +1,30 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>NuevaTarea</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form #newTaskForm="ngForm" (ngSubmit)="crearTarea()">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Descripción</ion-label>
+        <ion-input [(ngModel)]="tarea.nombre" name="nombre" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Prioridad</ion-label>
+        <ion-select [(ngModel)]="tarea.prioridad" name="prioridad">
+          <ion-option value="3">Alta</ion-option>
+          <ion-option value="2">Media</ion-option>
+          <ion-option value="1">Baja</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <p>
+      <button type="submit" ion-button color="primary" block [disabled]="newTaskForm.invalid">Crear tarea</button>
+    </p>
+  </form>
+</ion-content>

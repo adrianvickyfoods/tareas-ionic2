@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Tareas</ion-title>
+  </ion-navbar>
+
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="estadoTareas">
+      <ion-segment-button value="pendientes">
+        Pendientes
+      </ion-segment-button>
+      <ion-segment-button value="terminadas">
+        Terminadas
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item-sliding #slidingItem *ngFor="let tarea of getListaTareasActual()">
+      <ion-item>
+        <h2>{{tarea.nombre}}
+        </h2>
+        <p>
+          <ion-badge [color]="getTareaColor(tarea)">{{tarea.getPrioridadString()}}</ion-badge> 
+          {{tarea.fechaAlta | date:"dd/MM/y HH:mm"}}</p>
+      </ion-item>
+      <ion-item-options side="left">
+        <button *ngIf="tarea.estado == 'PENDIENTE'" ion-button color="secondary" (click)="cambiarEstadoTarea(slidingItem, tarea)">
+          <ion-icon name="checkmark-circle"></ion-icon>
+          Terminada
+        </button>
+        <button *ngIf="tarea.estado == 'TERMINADA'" ion-button color="primary" (click)="cambiarEstadoTarea(slidingItem, tarea)">
+          <ion-icon name="undo"></ion-icon>
+          Pendiente
+        </button>
+      </ion-item-options>
+      <ion-item-options side="right">
+        <button ion-button color="danger" (click)="eliminarTarea(slidingItem, tarea)">
+          <ion-icon name="trash"></ion-icon>
+          Eliminar
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-fab right bottom>
+    <button ion-fab color="primary" (click)="crearTarea()">
+      <ion-icon name="create"></ion-icon>
+    </button>
+  </ion-fab>  
+</ion-content>

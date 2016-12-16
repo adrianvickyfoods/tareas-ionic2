@@ -1,30 +1,25 @@
+import { PerfilPage } from '../pages/perfil/perfil';
+import { Storage } from '@ionic/storage';
+import { NuevaTareaPage } from '../pages/nueva-tarea/nueva-tarea';
+import { IUsuario } from '../model/usuario';
+import { LoginPage } from '../pages/login/login';
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Events, Nav, Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
-import { Page1 } from '../pages/page1/page1';
-import { Page2 } from '../pages/page2/page2';
-
+declare let cordova: any;
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
+  loggedUser: IUsuario;
+  rootPage: any = LoginPage;
 
-  rootPage: any = Page1;
-
-  pages: Array<{title: string, component: any}>;
-
-  constructor(public platform: Platform) {
+  constructor(public platform: Platform, public events: Events, 
+              public storage: Storage) {
     this.initializeApp();
-
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Page One', component: Page1 },
-      { title: 'Page Two', component: Page2 }
-    ];
-
   }
 
   initializeApp() {
@@ -33,7 +28,34 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
       Splashscreen.hide();
+
+      if (this.platform.is('cordova')) {
+        cordova.plugins.backgroundMode.setDefaults({
+          title: "Tareas Ionic",
+          text: "Activa en segundo plano"
+        });
+        cordova.plugins.backgroundMode.enable();
+      }
+
+      this.events.subscribe('user:logged', (userData) => {
+        this.loggedUser = <IUsuario>userData[0];
+      });
     });
+  }
+
+  crearTarea() {
+    this.nav.push(NuevaTareaPage);
+  }
+
+  irPerfil() {
+    console.log("Ir perfil");
+    this.nav.push(PerfilPage);
+  }
+
+  logout() {
+    this.storage.remove('auth-token').then(
+      () => this.nav.setRoot(LoginPage)
+    );
   }
 
   openPage(page) {
