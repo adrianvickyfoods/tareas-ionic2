@@ -7,6 +7,8 @@ Mediante NPM (Node Package Manager) instalaremos Ionic y Cordova.
 
 Para restaurar las dependencias del proyecto ejecuta:
 
-**npm install**
+**npm install** (Instalar dependencias web a partir de package.json)
 
-**cordova prepare**
+**npm serve** (Para compilar la parte web y crear los bundle)
+
+**cordova prepare** (Instalar plataforma y plugins de Cordova a partir de config.xml)
